@@ -1,0 +1,40 @@
+REQUEST FOR PROPOSAL (RFP)
+DOCUMENT ID: RFP-2026-AI-MODERN
+ISSUANCE DATE: May 20, 2026
+ISSUING ENTITY: Nexus Global Logistics Corp.
+PROJECT TITLE: Enterprise Core Legacy System AI Modernization
+
+1. OBJECTIVE & BACKGROUND
+Nexus Global Logistics Corp. operates a highly distributed, legacy supply-chain management network spanning 14 global transit zones. Our routing algorithms, inventory prediction frameworks, and compliance processing pipelines are built on legacy infrastructure that requires manual updates and suffers from high processing latency. 
+
+We are seeking an external artificial intelligence and cloud automation partner to completely modernize our core infrastructure. The target outcome is to transition manual, time-consuming data pipelines into predictive, automated workflows that compress operational workflows from hours down to real-time execution.
+
+2. MANDATORY SCOPE OF WORK & TECHNICAL REQUIREMENTS
+The selected vendor must architect, build, and deploy an end-to-end production pipeline addressing the following three core pillars:
+
+Pillar A: Predictive Routing & Inventory Synchronization
+- Implement advanced Machine Learning models to dynamically predict global shipping delays based on live port congestion metrics.
+- Ensure automated routing synchronization across multi-region cloud infrastructures to eliminate single-point-of-failure downtimes.
+
+Pillar B: Automated Regulatory Compliance Parsing
+- Build an automated parsing mechanism capable of ingesting variable custom manifests, billing invoices, and international shipping documents.
+- The system must automatically flag custom anomalies, tariff classification mismatches, and compliance discrepancies before border entry.
+
+Pillar C: System Reliability, Monitoring & Uptime Mitigation
+- The proposed solution must explicitly maintain an active-active high availability (HA) state across at least three geographical cloud zones.
+- The framework must include failover automation mechanisms ensuring a minimum platform uptime SLA of 99.99%.
+
+3. SECURITY & REGULATORY GOVERNANCE MANDATES
+Because Nexus handles cross-border trade metadata, commercial financial metrics, and corporate identities, security compliance is non-negotiable. Vendors will be instantly disqualified unless they explicitly demonstrate and satisfy the following standards:
+- The entire application architecture, hosting layer, and data-at-rest storage must fully maintain SOC2 Type II Certification guidelines.
+- The underlying AI models must process data in strict accordance with GDPR (General Data Protection Regulation) laws, ensuring zero persistent retention of identifiable customer metadata or PII (Personally Identifiable Information) within public foundational model training sets.
+- Implementation of end-to-end AES-256 encryption for data in transit and at rest.
+
+4. VENDOR PAST PERFORMANCE EVALUATION CRITERIA
+Proposals will be heavily scored based on verifiable execution capabilities rather than theoretical claims. Vendors must provide concrete case study evidence proving:
+- A minimum of 5 years of operational B2B experience deploying enterprise-grade cloud or machine learning automations.
+- A documented past performance record showcasing a large-scale data pipeline optimization project where a client achieved at least a 30% reduction in operational or infrastructure overhead.
+- Explicit experience managing secure multi-region system architectures.
+
+5. SUBMISSION GUIDELINES
+Proposals must be structured logically, directly mapping vendor capabilities against the specific pillars and security compliance guidelines outlined in this document. Financial schedules and implementation timelines must be included.

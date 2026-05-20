@@ -1,0 +1,6 @@
+PROJECT TITLE: Request for Proposal (RFP) - Global Infrastructure Optimization
+OBJECTIVE: Secure an external technical partner to modernize our distributed web presence.
+CRITICAL MANDATORY GUIDELINES:
+1. Vendor must demonstrate concrete data architecture strategy detailing security compliance standards.
+2. Proposal must explicitly specify high-level mitigation strategies for multi-region system uptime.
+3. Vendor must demonstrate previous success in large-scale infrastructure optimization.

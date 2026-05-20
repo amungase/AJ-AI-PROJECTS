@@ -1,0 +1,4 @@
+Company Name: CloudScale Solutions Inc.
+Core Competencies: Enterprise cloud migration, multi-region architecture setup, and serverless application development.
+Security Compliance: SOC2 Type II Certified, GDPR Compliant. ISO 27001 compliant infrastructure.
+Past Performance: Migrated a Fortune 500 logistics provider from on-premise infrastructure to AWS/GCP across 3 distinct global zones, reducing infrastructure overhead by 42%. We have 7 years of operational B2B experience.
