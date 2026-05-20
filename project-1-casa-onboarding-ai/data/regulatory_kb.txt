@@ -1,0 +1,8 @@
+## SECTION 1: CORPORATE IDENTITY VERIFICATION
+Every current account corporate applicant must provide a valid Certificate of Incorporation alongside an active PAN Card registration mapping explicitly to the company entity name.
+
+## SECTION 2: ANTI-MONEY LAUNDERING BENEFICIAL OWNERSHIP
+Ultimate Beneficial Ownership (UBO) must be clearly stated. Any entity holding greater than 25% voting power or equity controls must furnish direct passport credentials or national registration markers.
+
+## SECTION 3: SIGNATORY AUTHORIZATION BREAKPOINTS
+Partnership deeds and corporate resolutions must contain an explicit signature execution matrix designating a primary operational officer. Missing or unverified executive signatures require systematic processing holds.
