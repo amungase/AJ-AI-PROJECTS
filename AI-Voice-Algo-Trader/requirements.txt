@@ -1,7 +1,12 @@
+# Telegram bot (v21+ async API)
 python-telegram-bot>=21.6,<22
+
+# Zerodha Kite Connect
 kiteconnect>=5.0.1
+
+# Environment variables
 python-dotenv>=1.0.1
-google-genai>=0.1.1
-pydantic>=2.0.0
+
+# Voice note transcription (Google free tier via SpeechRecognition; needs ffmpeg for ogg)
 SpeechRecognition>=3.10.4
 pydub>=0.25.1

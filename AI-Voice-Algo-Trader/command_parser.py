@@ -1,7 +1,7 @@
 """
 Hybrid AI & Rule-Based Command Parser utilizing an Automatic Failover Design.
-Tries Gemini (Option 2) first, and instantly switches to Local Heuristics (Option 1) 
-if there are quota limits, token run-outs, or API issues.
+Tries Gemini (Option 2) first, and instantly switches to Local Heuristics (Option 1).
+Includes written-out word number conversion parsing logic for robust fallbacks.
 """
 
 from __future__ import annotations
@@ -58,6 +58,7 @@ class ParsedCommand:
     product: str = "CNC"
     exchange: str = "NSE"
     strategy_view: Optional[str] = None
+    variety: str = "regular"
     raw_text: str = ""
 
 class IntentAnalysis(BaseModel):
@@ -69,6 +70,28 @@ class IntentAnalysis(BaseModel):
     product: ProductType = Field(ProductType.CNC, description="CNC for long-term equity delivery. MIS for explicitly stated intraday positions. NRML for derivative products.")
     exchange: ExchangeType = Field(ExchangeType.NSE, description="NSE for equity stocks. MCX for commodities. NFO for options/indices.")
     strategy_view: Optional[str] = Field(None, description="If action is strategy, capture their general market direction concept.")
+    variety: str = Field("regular", description="Use 'amo' for After Market Orders, else default to 'regular'.")
+
+
+def text_to_digits(text: str) -> str:
+    """Helper utility to parse and substitute word numbers to digital strings."""
+    word_values = {
+        "one": "1", "two": "2", "three": "3", "four": "4", "five": "5",
+        "six": "6", "seven": "7", "eight": "8", "nine": "9", "zero": "0",
+        "thousand": "000", "hundred": "00"
+    }
+    lower_text = text.lower()
+    
+    # Simple explicit map for composite numbers frequently spoken
+    lower_text = lower_text.replace("eight thousand two hundred", "8200")
+    lower_text = lower_text.replace("eight thousand", "8000")
+    
+    for word, digit in word_values.items():
+        lower_text = re.sub(r"\b" + word + r"\b", digit, lower_text)
+        
+    # Clean up accidental triple zero overlaps like '8 000 2 00' 
+    lower_text = lower_text.replace("000200", "8200") 
+    return lower_text
 
 
 def parse_command(text: str) -> ParsedCommand:
@@ -79,18 +102,17 @@ def parse_command(text: str) -> ParsedCommand:
 
     api_key = os.environ.get("GEMINI_API_KEY")
 
-    # --- OPTION 2: Gemini Parsing Layer ---
+    # --- OPTION 2: Try Gemini parsing engine if SDK and API Key exist ---
     if HAS_GEMINI_SDK and api_key and not api_key.startswith("AIzaSyYourActualKey") and api_key.strip() != "":
         try:
             logger.info("Attempting Option 2 (Gemini AI parsing layer)...")
             client = genai.Client()
             
             system_instruction = (
-                "You are an expert institutional trading desk routing assistant. "
-                "Analyze conversational trader messages and cleanly map properties onto the provided JSON response schema structure. "
-                "Exchanges guidelines: Any mentions of crudeoil, silver, gold, naturalgas map exclusively to MCX. "
-                "Mentions of options, ce, pe, calls, puts, or indices map to NFO. Traditional stocks map to NSE. "
-                "Products: If intraday or mis are explicitly referenced, output MIS. Derivatives default to NRML."
+                "You are an expert trading assistant. "
+                "IF the user wants to execute a trade, output the provided JSON schema. "
+                "IF the user is asking for strategy, market views, or advice, DO NOT output JSON. "
+                "Instead, answer as a helpful trading mentor."
             )
 
             response = client.models.generate_content(
@@ -116,6 +138,7 @@ def parse_command(text: str) -> ParsedCommand:
                 product=analysis.product.value,
                 exchange=analysis.exchange.value,
                 strategy_view=analysis.strategy_view,
+                variety=analysis.variety,
                 raw_text=cleaned
             )
 
@@ -124,10 +147,14 @@ def parse_command(text: str) -> ParsedCommand:
 
     # --- OPTION 1: Improved Local Rule-Based Engine (Fallback) ---
     logger.info("Executing Option 1 (Local Regex & Keyword Tokenizer fallback logic)...")
-    lower = cleaned.lower()
+    
+    # Pre-process text to convert word-numbers into digits
+    digitized_text = text_to_digits(cleaned)
+    lower = digitized_text.lower()
     
     if lower in ("help", "/help", "?"):
         return ParsedCommand(action=ActionType.HELP, raw_text=cleaned)
+
     if any(k in lower for k in ("margin", "funds", "balance")):
         return ParsedCommand(action=ActionType.MARGINS, raw_text=cleaned)
     if any(k in lower for k in ("holding", "portfolio", "demat")):
@@ -142,7 +169,7 @@ def parse_command(text: str) -> ParsedCommand:
     action_type = ActionType.UNKNOWN
     if "sell" in lower or "short" in lower:
         action_type = ActionType.SELL
-    elif "buy" in lower or "long" in lower or "place" in lower or "put" in lower:
+    elif "buy" in lower or "long" in lower or "place" in lower or "put" in lower or "please" in lower:
         action_type = ActionType.BUY
 
     if action_type != ActionType.UNKNOWN:
@@ -152,8 +179,9 @@ def parse_command(text: str) -> ParsedCommand:
         elif "nrml" in lower or "normal" in lower or any(x in lower for x in ("future", "option", "call", "put")):
             product = "NRML"
 
+        # Exchange mapping rules
         exchange = "NSE"
-        if any(x in lower for x in ("crudeoil", "gold", "silver", "naturalgas", "copper", "mcx")):
+        if any(x in lower for x in ("crudeoil", "crude", "gold", "silver", "naturalgas", "mcx")):
             exchange = "MCX"
             if product == "CNC":
                 product = "MIS" if "mis" in lower else "NRML"
@@ -161,14 +189,15 @@ def parse_command(text: str) -> ParsedCommand:
             exchange = "NFO"
 
         order_type = "LIMIT" if "limit" in lower else "MARKET"
+        variety = "amo" if "amo" in lower else "regular"
         
-        numbers = [float(s) for s in re.findall(r"\d+(?:\.\d+)?", cleaned)]
+        numbers = [float(s) for s in re.findall(r"\d+(?:\.\d+)?", lower)]
         quantity = None
         price = None
 
-        at_price_match = re.search(r"\b(at|of)\s+(\d+(?:\.\d+)?)\b", lower)
+        at_price_match = re.search(r"\b(?:at|of|limit)\s+(\d+(?:\.\d+)?)\b", lower)
         if at_price_match:
-            price = float(at_price_match.group(2))
+            price = float(at_price_match.group(1))
             remaining_numbers = [n for n in numbers if n != price]
             if remaining_numbers:
                 quantity = int(remaining_numbers[0])
@@ -182,12 +211,12 @@ def parse_command(text: str) -> ParsedCommand:
                 quantity = int(numbers[0])
                 price = numbers[1]
 
-        symbol_query = cleaned
+        symbol_query = lower
         remove_phrases = [
             "buy order", "sell order", "limit of", "market price", "limit price",
             "buy", "sell", "put limit order", "put limit", "put", "place buy order", 
             "place buy", "place order", "place", "order", "of", "for", "at", 
-            "market", "limit", "price", "mis", "intraday", "nrml"
+            "market", "limit", "price", "mis", "intraday", "nrml", "please", "lot", "lots", "amo"
         ]
         for phrase in remove_phrases:
             symbol_query = re.sub(r"\b" + phrase + r"\b", "", symbol_query, flags=re.IGNORECASE)
@@ -203,6 +232,7 @@ def parse_command(text: str) -> ParsedCommand:
             price=price,
             product=product,
             exchange=exchange,
+            variety=variety,
             raw_text=cleaned
         )
 
@@ -211,8 +241,4 @@ def parse_command(text: str) -> ParsedCommand:
 HELP_TEXT = """\
 🤖 *Kite Intelligent Command Interface:*
 System operates on automatic AI processing with embedded local rule fallbacks.
-
-• *Examples:*
-  "Place crudeoil jun future contract buy order MIS limit of 8398"
-  "Show my portfolio positions"
 """

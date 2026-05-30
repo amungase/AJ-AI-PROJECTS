@@ -1,22 +1,37 @@
-# 🚀 AI-Hybrid Conversational Trading Bot
+# 🚀 AI-Hybrid Conversational Trading Assistant
 
-An AI-powered conversational algorithmic trading engine that enables real-time trade execution through Telegram voice and text commands using Zerodha Kite Connect APIs.
+An AI-powered conversational trading assistant that enables real-time trade execution through Telegram voice and text commands using Zerodha Kite Connect APIs.
 
-This project combines Generative AI, conversational interfaces, voice processing, and rule-based failover systems to create a production-grade autonomous trading assistant.
+This project combines Generative AI, conversational interfaces, voice processing, broker integrations, and rule-based failover systems to demonstrate how natural language can be used to interact with trading platforms.
+
+The project is intended for educational, research, and software engineering demonstration purposes.
 
 ---
 
 # 🎯 Key Features
 
 ✅ Voice-based trading execution via Telegram
-✅ AI-powered natural language trading parser
+
+✅ AI-powered natural language command parsing
+
 ✅ Gemini AI + Local Rule-Based Failover Architecture
+
 ✅ Real-time NSE / NFO / MCX instrument resolution
+
 ✅ Dry-run simulation mode for safe testing
-✅ Automated order execution through Zerodha Kite Connect
+
+✅ Automated order placement through Zerodha Kite Connect
+
 ✅ Voice-to-trade workflow using SpeechRecognition + FFmpeg
-✅ Intelligent options/futures contract mapping
+
+✅ Intelligent options and futures contract mapping
+
+✅ Portfolio insights and holdings summaries
+
+✅ Educational strategy exploration based on user-defined market assumptions
+
 ✅ Markdown-safe Telegram response handling
+
 ✅ Authorized-user security restrictions
 
 ---
@@ -66,6 +81,10 @@ Trade Execution / Simulation
 "Close my crudeoil position"
 
 "Show portfolio holdings"
+
+"Provide a summary of my current portfolio"
+
+"Explain option strategy structures commonly associated with a bearish market outlook"
 
 
 ---
@@ -162,18 +181,20 @@ python telegram_kite_bot.py
 
 # 🎤 Voice Trading Workflow
 
-1. Send voice note on Telegram
-2. Bot converts speech → text
-3. Gemini AI parses trading intent
-4. Local failover engine validates structure
-5. Zerodha API executes or simulates trade
-6. Telegram returns execution response
+1. Send a voice note or text command on Telegram
+2. Bot converts speech to text
+3. Gemini AI interprets user intent
+4. Local failover engine validates command structure
+5. Zerodha API executes or simulates the requested action
+6. Telegram returns execution or portfolio response
+
+Users remain responsible for reviewing and validating all trade instructions and investment decisions.
 
 ---
 
 # 🔥 Hybrid AI Architecture
 
-The project uses a dual-layer parsing engine:
+The project uses a dual-layer parsing engine.
 
 ## Layer 1 — Gemini AI
 
@@ -183,19 +204,21 @@ The project uses a dual-layer parsing engine:
 
 ## Layer 2 — Local Rule Engine (Failover)
 
-* Automatically activates during:
+Automatically activates during:
 
-  * API failures
-  * AI quota exhaustion
-  * Connectivity issues
-* Ensures uninterrupted trading operations
+* API failures
+* AI quota exhaustion
+* Connectivity issues
 
-This architecture increases reliability for production-grade trading systems.
+Ensures uninterrupted command processing and workflow continuity.
+
+This architecture increases reliability and resiliency for conversational broker integrations.
 
 ---
+
 # 🧪 Safety Mode
 
-The system supports secure simulation mode:
+The system supports secure simulation mode.
 
 env
 DRY_RUN=true
@@ -214,39 +237,48 @@ DRY_RUN=false
 # 🔐 Security Features
 
 ✅ Authorized Telegram user restriction
+
 ✅ Environment-based secret management
+
 ✅ Dry-run execution safeguards
+
 ✅ AI failover protection
+
 ✅ Exchange-specific validation logic
 
 ---
 
-# 📈 Future Enhancements
 
-* Multi-account portfolio orchestration
-* AI-generated options strategies
-* Autonomous risk management
-* Live broker calling agent
-* Advanced portfolio analytics
-* Real-time market data streaming
+# 📚 Educational Use Notice
+
+This project demonstrates conversational AI, voice interfaces, broker API integrations, and workflow automation within trading environments.
+
+Any market commentary, portfolio insights, strategy discussions, or AI-generated outputs are provided solely for educational and informational purposes.
+
+The software does not provide investment advice, trading recommendations, research reports, portfolio management services, or financial advisory services.
+
+Users are solely responsible for evaluating any information produced by the system and for making their own trading and investment decisions.
 
 ---
 
 # ⚠️ Disclaimer
 
-This project is developed for educational and research purposes only.
+This project is an educational and research demonstration of AI-powered conversational interfaces integrated with broker APIs.
 
-Algorithmic trading involves financial risk.
-Use responsibly and test thoroughly before enabling live trading.
+The software is not intended to provide investment advice, trading recommendations, financial research, portfolio management, or advisory services.
 
-The author is not responsible for any financial losses resulting from the use of this software.
+Any market discussions, strategy examples, portfolio analytics, or AI-generated outputs are illustrative and informational only.
+
+Trading and investing involve substantial financial risk. Users should conduct their own research and seek professional advice where appropriate before making investment decisions.
+
+The author assumes no responsibility for any financial losses, damages, or consequences arising from the use of this software.
 
 ---
 
-🔗 GitHub:
-[https://github.com/amungase](https://github.com/amungase)
+## 🔗 Portfolio
 
-🔗 Portfolio:
 https://ajgenstudio.lovable.app/
 
----
+## 🔗 GitHub
+
+https://github.com/amungase/AJ-AI-PROJECTS

@@ -109,9 +109,11 @@ class KiteService:
             lines.append(f"• {o.get('tradingsymbol')} | {o.get('transaction_type')} {o.get('order_type')} | Qty: {o.get('quantity')} @ ₹{o.get('price')} | [{o.get('status')}]")
         return "\n".join(lines)
 
-    def place_dynamic_order(self, *, exchange: str, tradingsymbol: str, transaction_type: str, quantity: int, order_type: str, product: str, price: Optional[float] = None) -> str:
+    def place_dynamic_order(self, *, exchange: str, tradingsymbol: str, transaction_type: str, quantity: int, order_type: str, product: str, price: Optional[float] = None, variety: str = "regular") -> str:
+        kite_variety = self.kite.VARIETY_AMO if variety.lower() == "amo" else self.kite.VARIETY_REGULAR
+
         params: dict[str, Any] = {
-            "variety": self.kite.VARIETY_REGULAR, "exchange": exchange, "tradingsymbol": tradingsymbol,
+            "variety": kite_variety, "exchange": exchange, "tradingsymbol": tradingsymbol,
             "transaction_type": transaction_type.upper(), "quantity": int(quantity), "product": product,
             "order_type": order_type.upper(), "validity": self.kite.VALIDITY_DAY,
         }
@@ -124,7 +126,8 @@ class KiteService:
                 f"🧪 *DRY RUN MOCK TRANSACTION LOGGED*\n"
                 f"Exchange: `{exchange}`\n"
                 f"Action: `{transaction_type.upper()}` {quantity} lots/shares of `{tradingsymbol}`\n"
-                f"Execution Type: `{order_type}`" + (f" Target Limit: ₹{price}" if price else "") + f" [{product}]\n\n"
+                f"Execution Type: `{order_type}`" + (f" Target Limit: ₹{price}" if price else "") + f" [{product}]\n"
+                f"Variety: `{kite_variety}`\n\n"
                 f"_Set DRY_RUN=false inside your configuration .env to pass this to the market live exchange._"
             )
 
